@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "hastur"
+version = "0.1.0"
+description = "Downloader manager for large files"
+authors = ["Alexis Couronne <alexis@skitoo.net>"]
+license = "GPL3"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+[tool.poetry.dev-dependencies]
+ipython = "^7.19.0"
+pytest = "^6.1.2"
+black = "^20.8b1"
+pylint = "^2.6.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
