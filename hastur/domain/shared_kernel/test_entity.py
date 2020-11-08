@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest.mock import Mock, call
 from uuid import uuid4, UUID
+from dataclasses import dataclass
 from datetime import datetime
 import pytest
 from .entity import Aggregate, EventVersionError, HandlerNotFoundError
@@ -8,7 +9,9 @@ from .event import DomainEvent, EventStream
 
 
 class DownloadCreatedEvent(DomainEvent):
-    pass
+    @dataclass
+    class Payload:
+        url: str
 
 
 class UnknownEvent(DomainEvent):
@@ -16,9 +19,14 @@ class UnknownEvent(DomainEvent):
 
 
 class MyEntity(Aggregate):
-    def __init__(self, id_: UUID, mock: Mock, stream: EventStream):
+    def __init__(
+        self, id_: UUID, mock: Mock, stream: EventStream = None, init_payload=None
+    ):
         self.mock = mock
-        super().__init__(id_, stream)
+        super().__init__(id_, stream, init_payload)
+
+    def post_init(self, payload):
+        self.mock.post_init(payload)
 
     def on_download_created(self, event: DownloadCreatedEvent):
         self.mock.event_called(event)
@@ -102,3 +110,10 @@ class TestAggregate(TestCase):
 
         with pytest.raises(HandlerNotFoundError):
             MyEntity(self.id_, self.mock, stream)
+
+    def test_post_init(self):
+        payload = DownloadCreatedEvent.Payload("toto.com")
+        mock = Mock()
+        MyEntity(self.id_, mock, init_payload=payload)
+
+        mock.post_init.assert_called_once_with(payload)

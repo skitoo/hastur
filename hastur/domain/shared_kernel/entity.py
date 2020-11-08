@@ -24,12 +24,16 @@ class EventVersionError(AggregateError):
 
 
 class Aggregate(ABC):
-    def __init__(self, id_: UUID, stream: EventStream = None):
+    def __init__(self, id_: UUID, stream: EventStream = None, init_payload=None):
         self.__id: UUID = id_
         self.__stream: EventStream = stream or []
         self.__version: int = 0
         self.__new_events: EventStream = []
         self.__replay_events()
+        self.post_init(init_payload)
+
+    def post_init(self, payload):
+        pass
 
     def __replay_events(self):
         for event in self.__stream:
