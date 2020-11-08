@@ -1,6 +1,6 @@
 from uuid import uuid4, UUID
-from dataclasses import dataclass
 from abc import ABC, abstractmethod
+from typing import Optional
 from hastur.domain.shared_kernel.store import EventStore, EventStoreError
 from hastur.domain.shared_kernel.message import (
     Command,
@@ -11,14 +11,12 @@ from hastur.domain.shared_kernel.message import (
 from hastur.domain.download.entity.bucket import Bucket
 
 
-@dataclass
 class AddNewBucketCommand(Command):
     pass
 
 
-@dataclass
 class AddNewBucketResponse(Response):
-    bucket_id: UUID = None
+    bucket_id: Optional[UUID] = None
 
 
 class AddNewBucketPresenter(Presenter, ABC):

@@ -1,6 +1,5 @@
 from unittest import TestCase
 from unittest.mock import Mock
-from dataclasses import dataclass
 import pytest
 from .message import (
     CommandBus,
@@ -16,12 +15,10 @@ from .message import (
 )
 
 
-@dataclass
 class AddUrlCommand(Command):
     url: str
 
 
-@dataclass
 class FetchUrlQuery(Query):
     id_: str
 
@@ -70,7 +67,7 @@ class TestCommandBus(TestCase):
 
     def test_execute_with_success(self):
         handler = AddUrl(self.mock)
-        command = AddUrlCommand("toto.com")
+        command = AddUrlCommand(url="toto.com")
         presenter = Mock()
         self.instance.register_handler(handler)
 
@@ -80,7 +77,7 @@ class TestCommandBus(TestCase):
 
     def test_execute_with_bad_command_type(self):
         handler = AddUrl(self.mock)
-        command = FetchUrlQuery("toto.com")
+        command = FetchUrlQuery(id_="toto.com")
         presenter = Mock()
         self.instance.register_handler(handler)
 
@@ -90,7 +87,7 @@ class TestCommandBus(TestCase):
         self.mock.execute.assert_not_called()
 
     def test_execute_with_unkown_command(self):
-        command = AddUrlCommand("toto.com")
+        command = AddUrlCommand(url="toto.com")
         presenter = Mock()
 
         with pytest.raises(MessageBusError):
@@ -121,7 +118,7 @@ class TestQueryBus(TestCase):
 
     def test_execute_with_success(self):
         handler = FetchUrl(self.mock)
-        query = FetchUrlQuery("toto.com")
+        query = FetchUrlQuery(id_="toto.com")
         presenter = Mock()
         self.instance.register_handler(handler)
 
@@ -131,7 +128,7 @@ class TestQueryBus(TestCase):
 
     def test_execute_with_bad_command_type(self):
         handler = FetchUrl(self.mock)
-        query = AddUrlCommand("toto.com")
+        query = AddUrlCommand(url="toto.com")
         presenter = Mock()
         self.instance.register_handler(handler)
 
@@ -141,7 +138,7 @@ class TestQueryBus(TestCase):
         self.mock.execute.assert_not_called()
 
     def test_execute_with_unkown_command(self):
-        query = FetchUrlQuery("toto.com")
+        query = FetchUrlQuery(id_="toto.com")
         presenter = Mock()
 
         with pytest.raises(MessageBusError):
