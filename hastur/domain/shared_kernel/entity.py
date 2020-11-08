@@ -9,17 +9,17 @@ class AggregateError(Exception):
 
 class HandlerNotFoundError(AggregateError):
     def __init__(self, handler: str, aggregate: "Aggregate"):
-        super().__init__(
-            f"Handle '{handler}' not found on '{aggregate.__class__.__name__}' aggregate"
-        )
+        name = aggregate.__class__.__name__
+        super().__init__(f"Handle '{handler}' not found on '{name}' aggregate")
 
 
 class EventVersionError(AggregateError):
     def __init__(self, event: DomainEvent, aggregate: "Aggregate"):
+        e_version = event.version
+        a_version = aggregate.next_version
+        name = aggregate.__class__.__name__
         super().__init__(
-            f"Event version '{event.version}' does not match \
-            expected version '{aggregate.next_version}' of \
-            aggregate '{aggregate.__class__.__name__}'"
+            f"Event version '{e_version}' does not match expected version '{a_version}' of '{name}'"
         )
 
 
