@@ -1,13 +1,15 @@
 from datetime import datetime
 from hastur.domain.shared_kernel.entity import Aggregate, AggregateError
-from hastur.domain.download.event import (
-    BucketCreatedEvent,
-)
+from hastur.domain.shared_kernel.event import DomainEvent
 
 now = datetime.now
 
 
 class BucketError(AggregateError):
+    pass
+
+
+class BucketCreatedEvent(DomainEvent):
     pass
 
 

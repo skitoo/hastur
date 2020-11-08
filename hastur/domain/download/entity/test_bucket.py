@@ -1,7 +1,6 @@
 from uuid import uuid4
 from datetime import datetime
-from hastur.domain.download.event import BucketCreatedEvent
-from .bucket import Bucket
+from .bucket import Bucket, BucketCreatedEvent
 
 now = datetime.now
 

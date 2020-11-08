@@ -1,8 +1,7 @@
 from uuid import uuid4
 from datetime import datetime
 import pytest
-from hastur.domain.download.event import DownloadCreatedEvent
-from .download import Download, DownloadStatus, DownloadError
+from .download import Download, DownloadStatus, DownloadError, DownloadCreatedEvent
 
 
 now = datetime.now

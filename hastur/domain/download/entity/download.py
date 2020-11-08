@@ -1,7 +1,8 @@
 from datetime import datetime
 from enum import Enum
+from dataclasses import dataclass
 from hastur.domain.shared_kernel.entity import Aggregate, AggregateError
-from hastur.domain.download.event import DownloadCreatedEvent
+from hastur.domain.shared_kernel.event import DomainEvent
 
 now = datetime.now
 
@@ -12,6 +13,12 @@ class DownloadError(AggregateError):
 
 class DownloadStatus(Enum):
     NEW = "new"
+
+
+class DownloadCreatedEvent(DomainEvent):
+    @dataclass
+    class Payload:
+        url: str
 
 
 class Download(Aggregate):
