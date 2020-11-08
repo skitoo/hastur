@@ -1,9 +1,6 @@
-import logging
 from abc import ABC
 from uuid import UUID
 from .event import EventStream, DomainEvent
-
-logger = logging.getLogger(__name__)
 
 
 class AggregateError(Exception):
