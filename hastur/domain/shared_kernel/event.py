@@ -3,9 +3,10 @@ from dataclasses import dataclass, is_dataclass
 from datetime import datetime
 from typing import List
 import re
+from .error import HasturError
 
 
-class EventError(Exception):
+class EventError(HasturError):
     def __init__(self, event: "DomainEvent"):
         name = event.__class__.__name__
         type_ = type(event.payload)

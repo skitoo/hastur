@@ -1,9 +1,10 @@
 from abc import ABC
 from uuid import UUID
 from .event import EventStream, DomainEvent
+from .error import HasturError
 
 
-class AggregateError(Exception):
+class AggregateError(HasturError):
     pass
 
 

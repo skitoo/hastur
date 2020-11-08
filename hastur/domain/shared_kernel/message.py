@@ -1,6 +1,19 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Dict
+from .error import HasturError
+
+
+class MessageBusError(HasturError):
+    pass
+
+
+class CommandBusError(MessageBusError):
+    pass
+
+
+class QueryBusError(MessageBusError):
+    pass
 
 
 @dataclass
@@ -20,7 +33,7 @@ class Query(Message, ABC):
 
 @dataclass
 class Response(ABC):
-    pass
+    error: HasturError = None
 
 
 class Presenter(ABC):
@@ -44,18 +57,6 @@ class CommandHandler(MessageHandler, ABC):
 
 
 class QueryHandler(MessageHandler, ABC):
-    pass
-
-
-class MessageBusError(Exception):
-    pass
-
-
-class CommandBusError(MessageBusError):
-    pass
-
-
-class QueryBusError(MessageBusError):
     pass
 
 
