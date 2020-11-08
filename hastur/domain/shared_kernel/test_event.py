@@ -30,7 +30,7 @@ def test_to_string():
     assert str(event) == f"<CardSended id: {id_} created_at: {now} version: {VERSION}>"
 
 
-def test_handle_name():
+def test_handler_name():
     event = DomainEvent(id_, now, VERSION)
     assert event.handler_name == "on_domain"
 
