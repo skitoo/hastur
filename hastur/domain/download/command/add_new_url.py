@@ -11,7 +11,11 @@ from hastur.domain.shared_kernel.message import (
     Response,
     Presenter,
 )
-from hastur.domain.download.entity.download import Download, DownloadCreatedEvent
+from hastur.domain.download.entity.download import (
+    Download,
+    DownloadCreatedEvent,
+    DownloadStatus,
+)
 
 
 class AddNewUrlCommand(Command):
@@ -35,7 +39,10 @@ class AddNewUrl(CommandHandler):
         try:
             self.locker.lock(message.url)
             download = Download(
-                uuid4(), init_payload=DownloadCreatedEvent.Payload(message.url)
+                uuid4(),
+                init_payload=DownloadCreatedEvent.Payload(
+                    url=message.url, status=DownloadStatus.NEW
+                ),
             )
             self.manager.save_and_dispatch([download])
         except HasturError as error:

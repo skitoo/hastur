@@ -1,6 +1,7 @@
+# pylint: disable=no-name-in-module
 from datetime import datetime
 from enum import Enum
-from dataclasses import dataclass
+from pydantic import BaseModel, HttpUrl
 from hastur.domain.shared_kernel.entity import Aggregate, AggregateError
 from hastur.domain.shared_kernel.event import DomainEvent
 
@@ -16,9 +17,9 @@ class DownloadStatus(Enum):
 
 
 class DownloadCreatedEvent(DomainEvent):
-    @dataclass
-    class Payload:
-        url: str
+    class Payload(BaseModel):
+        url: HttpUrl
+        status: DownloadStatus
 
 
 class Download(Aggregate):

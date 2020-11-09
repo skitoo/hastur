@@ -5,13 +5,17 @@ from .download import Download, DownloadStatus, DownloadError, DownloadCreatedEv
 
 
 now = datetime.now
+URL = "http://foo.com"
+status = DownloadStatus.NEW
 
 
 def test_download_post_init_with_payload_and_without_stream():
-    download = Download(uuid4(), init_payload=DownloadCreatedEvent.Payload("toto.com"))
+    download = Download(
+        uuid4(), init_payload=DownloadCreatedEvent.Payload(url=URL, status=status)
+    )
     assert len(download.new_events) == 1
     assert isinstance(download.new_events[0], DownloadCreatedEvent)
-    assert download.url == "toto.com"
+    assert download.url == URL
     assert download.status == DownloadStatus.NEW
 
 
@@ -24,10 +28,14 @@ def test_download_post_init_without_payload_and_with_stream():
     id_ = uuid4()
     download = Download(
         id_,
-        [DownloadCreatedEvent(id_, now(), 1, DownloadCreatedEvent.Payload("toto.com"))],
+        [
+            DownloadCreatedEvent(
+                id_, now(), 1, DownloadCreatedEvent.Payload(url=URL, status=status)
+            )
+        ],
     )
     assert len(download.new_events) == 0
-    assert download.url == "toto.com"
+    assert download.url == URL
     assert download.status == DownloadStatus.NEW
 
 
@@ -38,8 +46,8 @@ def test_download_post_init_with_payload_and_with_stream():
             id_,
             [
                 DownloadCreatedEvent(
-                    id_, now(), 1, DownloadCreatedEvent.Payload("toto.com")
+                    id_, now(), 1, DownloadCreatedEvent.Payload(url=URL, status=status)
                 )
             ],
-            DownloadCreatedEvent.Payload("toto.com"),
+            DownloadCreatedEvent.Payload(url=URL, status=status),
         )

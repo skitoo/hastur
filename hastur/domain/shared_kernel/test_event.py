@@ -1,6 +1,7 @@
+# pylint: disable=no-name-in-module
 from uuid import uuid4
-from dataclasses import dataclass
 from datetime import datetime
+from pydantic import BaseModel
 import pytest
 from .event import DomainEvent, EventError
 
@@ -11,14 +12,12 @@ VERSION = 1
 
 
 class DownloadCreatedEvent(DomainEvent):
-    @dataclass
-    class Payload:
+    class Payload(BaseModel):
         url: str
 
 
 class CardSended(DomainEvent):
-    @dataclass
-    class Payload:
+    class Payload(BaseModel):
         name: str
 
 
@@ -49,13 +48,13 @@ def test_handler_name():
 
 def test_payload():
     event = DownloadCreatedEvent(
-        id_, now, VERSION, DownloadCreatedEvent.Payload("toto.com")
+        id_, now, VERSION, DownloadCreatedEvent.Payload(url="toto.com")
     )
 
-    assert event.payload == DownloadCreatedEvent.Payload("toto.com")
+    assert event.payload == DownloadCreatedEvent.Payload(url="toto.com")
 
     with pytest.raises(EventError):
         DownloadCreatedEvent(id_, now, VERSION, "toto.com")
 
     with pytest.raises(EventError):
-        DownloadCreatedEvent(id_, now, VERSION, CardSended.Payload("Test"))
+        DownloadCreatedEvent(id_, now, VERSION, CardSended.Payload(name="Test"))

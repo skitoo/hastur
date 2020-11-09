@@ -1,9 +1,10 @@
+# pylint: disable=no-name-in-module
 from uuid import UUID
-from dataclasses import dataclass, is_dataclass
 from datetime import datetime
 from abc import ABC, abstractmethod
 from typing import List, NoReturn, Callable, Type
 import re
+from pydantic import BaseModel
 from .error import HasturError
 
 
@@ -17,8 +18,7 @@ class EventError(HasturError):
 
 
 class DomainEvent:
-    @dataclass
-    class Payload:
+    class Payload(BaseModel):
         pass
 
     def __init__(self, id_: UUID, created_at: datetime, version: int, payload=None):
@@ -26,8 +26,9 @@ class DomainEvent:
         self.created_at: datetime = created_at
         self.version: int = version
         self.payload = payload
-        if payload is not None and (
-            not is_dataclass(payload) or not isinstance(payload, self.__class__.Payload)
+        if payload and (
+            not isinstance(payload, BaseModel)
+            or not isinstance(payload, self.__class__.Payload)
         ):
             raise EventError(self)
 
