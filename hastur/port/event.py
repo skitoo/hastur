@@ -27,9 +27,6 @@ class LocalEventBus(EventBus):
 
     def dispatch(self, stream: EventStream) -> NoReturn:
         for event in stream:
-            print(type(event))
-            print(self.handlers)
             handlers = self.handlers.get(type(event), [])
-            print(handlers)
             for handler in handlers:
                 handler(event)
