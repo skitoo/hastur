@@ -29,7 +29,7 @@ class AddNewBucket(CommandHandler):
         response = AddNewBucketResponse()
         try:
             bucket = Bucket(uuid4())
-            self.store.save(bucket)
+            self.store.save([bucket])
         except EventStoreError as error:
             response.error = error
         else:

@@ -1,5 +1,6 @@
 from abc import ABC
 from uuid import UUID
+from typing import List
 from .event import EventStream, DomainEvent
 from .error import HasturError
 
@@ -22,6 +23,9 @@ class EventVersionError(AggregateError):
         super().__init__(
             f"Event version '{e_version}' does not match expected version '{a_version}' of '{name}'"
         )
+
+
+AggregateCollection = List["Aggregate"]
 
 
 class Aggregate(ABC):

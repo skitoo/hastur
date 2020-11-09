@@ -2,7 +2,7 @@ from unittest.mock import Mock
 from uuid import uuid4
 from datetime import datetime
 from hastur.domain.shared_kernel.store import StreamNotFoundError, EventStoreError
-from hastur.domain.download.entity.bucket import BucketCreatedEvent
+from hastur.domain.download.entity.bucket import BucketCreatedEvent, Bucket
 from hastur.domain.download.entity.download import DownloadStatus
 from .add_new_url import AddNewUrl, AddNewUrlCommand
 
@@ -13,7 +13,7 @@ def test_add_new_url_message_type():
     assert AddNewUrl(Mock()).message_type() == AddNewUrlCommand
 
 
-def test_add_new_bucket_success():
+def test_add_new_url_success():
     id_ = uuid4()
     url = "toto.com"
     store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
@@ -21,11 +21,10 @@ def test_add_new_bucket_success():
 
     AddNewUrl(store).execute(command, presenter)
 
-    store.load_stream.assert_called_once_with(id_)
+    store.load_stream.assert_called_once_with(id_, Bucket)
 
-    assert len(store.save.mock_calls) == 2
-    bucket = store.save.mock_calls[0].args[0]
-    download = store.save.mock_calls[1].args[0]
+    assert len(store.save.mock_calls) == 1
+    bucket, download = store.save.mock_calls[0].args[0]
 
     assert bucket.get_id() == id_
     assert url in bucket.urls
@@ -37,7 +36,7 @@ def test_add_new_bucket_success():
     assert response.error is None
 
 
-def test_add_new_bucket_with_invalid_bucket_id():
+def test_add_new_url_with_invalid_bucket_id():
     id_ = uuid4()
     url = "toto.com"
     store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
@@ -51,7 +50,7 @@ def test_add_new_bucket_with_invalid_bucket_id():
     assert isinstance(response.error, StreamNotFoundError)
 
 
-def test_add_new_bucket_when_save_fail():
+def test_add_new_url_when_save_fail():
     id_ = uuid4()
     url = "toto.com"
     store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
@@ -60,7 +59,7 @@ def test_add_new_bucket_when_save_fail():
 
     AddNewUrl(store).execute(command, presenter)
 
-    store.load_stream.assert_called_once_with(id_)
+    store.load_stream.assert_called_once_with(id_, Bucket)
     response = presenter.present.call_args[0][0]
     assert response.download_id is None
     assert isinstance(response.error, EventStoreError)

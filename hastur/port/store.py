@@ -1,34 +1,41 @@
 from uuid import UUID
-from typing import Dict
+from typing import Dict, Type, NoReturn
 from hastur.domain.shared_kernel.store import (
     EventStore,
     StreamNotFoundError,
     BaseVersionNotMatchError,
 )
-from hastur.domain.shared_kernel.entity import Aggregate
+from hastur.domain.shared_kernel.entity import Aggregate, AggregateCollection
 from hastur.domain.shared_kernel.event import EventStream
 
 
 class InMemoryEventStore(EventStore):
     def __init__(self):
-        self.events: Dict[UUID, EventStream] = {}
+        self.events: Dict[str, EventStream] = {}
 
-    def save(self, aggregate: Aggregate):
-        id_, new_events, base_version = (
-            aggregate.get_id(),
-            aggregate.new_events,
-            aggregate.base_version,
-        )
-        current_stream = self.events[id_] if id_ in self.events else []
+    def __check_version(self, aggregate: Aggregate):
+        current_stream = self.events.get(aggregate.index, [])
 
-        if len(current_stream) > 0 and current_stream[-1].version != base_version:
+        if (
+            len(current_stream) > 0
+            and current_stream[-1].version != aggregate.base_version
+        ):
             raise BaseVersionNotMatchError(
-                id_, current_stream[-1].version, base_version
+                aggregate.get_id(), current_stream[-1].version, aggregate.base_version
             )
 
-        self.events[id_] = current_stream + new_events
+    def __save(self, aggregate: Aggregate):
+        current_stream = self.events.get(aggregate.index, [])
+        self.events[aggregate.index] = current_stream + aggregate.new_events
 
-    def load_stream(self, id_: UUID) -> EventStream:
-        if id_ in self.events:
-            return self.events[id_]
+    def save(self, aggregates: AggregateCollection) -> NoReturn:
+        for aggregate in aggregates:
+            self.__check_version(aggregate)
+        for aggregate in aggregates:
+            self.__save(aggregate)
+
+    def load_stream(self, id_: UUID, aggregate_type: Type[Aggregate]) -> EventStream:
+        index = f"{aggregate_type.__name__}:{id_}"
+        if index in self.events:
+            return self.events[index]
         raise StreamNotFoundError(id_)

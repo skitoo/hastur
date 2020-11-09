@@ -16,7 +16,7 @@ def test_add_new_bucket_success():
     store.save.assert_called_once()
     presenter.present.assert_called_once()
 
-    bucket = store.save.call_args[0][0]
+    bucket = store.save.call_args[0][0][0]
     assert isinstance(bucket, Bucket)
 
     response = presenter.present.call_args[0][0]

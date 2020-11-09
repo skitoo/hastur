@@ -33,14 +33,13 @@ class AddNewUrl(CommandHandler):
     def execute(self, message: AddNewUrlCommand, presenter: Presenter):
         response = AddNewUrlResponse()
         try:
-            stream = self.store.load_stream(message.bucket_id)
+            stream = self.store.load_stream(message.bucket_id, Bucket)
             bucket = Bucket(message.bucket_id, stream)
             bucket.add_url(message.url)
             download = Download(
                 uuid4(), init_payload=DownloadCreatedEvent.Payload(message.url)
             )
-            self.store.save(bucket)
-            self.store.save(download)
+            self.store.save([bucket, download])
         except HasturError as error:
             response.error = error
         else:

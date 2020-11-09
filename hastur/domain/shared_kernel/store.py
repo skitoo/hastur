@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
-from .entity import Aggregate
+from typing import Type, NoReturn
+from .entity import Aggregate, AggregateCollection
 from .event import EventStream
 from .error import HasturError
 
@@ -24,9 +25,9 @@ current stored version '{current_version}'"
 
 class EventStore(ABC):
     @abstractmethod
-    def save(self, aggregate: Aggregate):
+    def save(self, aggregates: AggregateCollection) -> NoReturn:
         pass
 
     @abstractmethod
-    def load_stream(self, id_: UUID) -> EventStream:
+    def load_stream(self, id_: UUID, aggregate_type: Type[Aggregate]) -> EventStream:
         pass
