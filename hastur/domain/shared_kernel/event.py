@@ -1,7 +1,8 @@
 from uuid import UUID
 from dataclasses import dataclass, is_dataclass
 from datetime import datetime
-from typing import List
+from abc import ABC, abstractmethod
+from typing import List, NoReturn, Callable, Type
 import re
 from .error import HasturError
 
@@ -46,3 +47,15 @@ class DomainEvent:
 
 
 EventStream = List[DomainEvent]
+EventType = Type[DomainEvent]
+EventHandler = Callable[[DomainEvent], NoReturn]
+
+
+class EventBus(ABC):
+    @abstractmethod
+    def add_handler(self, event_type: EventType, handler: EventHandler) -> NoReturn:
+        pass
+
+    @abstractmethod
+    def dispatch(self, stream: EventStream) -> NoReturn:
+        pass
