@@ -2,7 +2,7 @@
 from uuid import UUID, uuid4
 from typing import Optional
 from pydantic import HttpUrl
-from hastur.domain.shared_kernel.store import EventStore
+from hastur.domain.shared_kernel.manager import AggregateManager
 from hastur.domain.shared_kernel.locker import Locker
 from hastur.domain.shared_kernel.error import HasturError
 from hastur.domain.shared_kernel.message import (
@@ -23,8 +23,8 @@ class AddNewUrlResponse(Response):
 
 
 class AddNewUrl(CommandHandler):
-    def __init__(self, store: EventStore, locker: Locker):
-        self.store: EventStore = store
+    def __init__(self, manager: AggregateManager, locker: Locker):
+        self.manager: AggregateManager = manager
         self.locker: Locker = locker
 
     def message_type(self) -> type:
@@ -37,7 +37,7 @@ class AddNewUrl(CommandHandler):
             download = Download(
                 uuid4(), init_payload=DownloadCreatedEvent.Payload(message.url)
             )
-            self.store.save([download])
+            self.manager.save_and_dispatch([download])
         except HasturError as error:
             response.error = error
         else:
