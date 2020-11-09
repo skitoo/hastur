@@ -1,65 +1,71 @@
 from unittest.mock import Mock
-from uuid import uuid4
 from datetime import datetime
-from hastur.domain.shared_kernel.store import StreamNotFoundError, EventStoreError
-from hastur.domain.download.entity.bucket import BucketCreatedEvent, Bucket
+from hastur.domain.shared_kernel.locker import AlreadyLockedError
+from hastur.domain.shared_kernel.store import EventStoreError
 from hastur.domain.download.entity.download import DownloadStatus
-from .add_new_url import AddNewUrl, AddNewUrlCommand
+from .add_new_url import AddNewUrl, AddNewUrlCommand, AddNewUrlResponse
 
 now = datetime.now
+URL = "http://foo.com"
 
 
 def test_add_new_url_message_type():
-    assert AddNewUrl(Mock()).message_type() == AddNewUrlCommand
+    assert AddNewUrl(Mock(), Mock()).message_type() == AddNewUrlCommand
 
 
 def test_add_new_url_success():
-    id_ = uuid4()
-    url = "toto.com"
-    store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
-    store.load_stream.return_value = [BucketCreatedEvent(id_, now(), 1)]
+    store, presenter, locker, command = (
+        Mock(),
+        Mock(),
+        Mock(),
+        AddNewUrlCommand(url=URL),
+    )
 
-    AddNewUrl(store).execute(command, presenter)
+    AddNewUrl(store, locker).execute(command, presenter)
 
-    store.load_stream.assert_called_once_with(id_, Bucket)
+    locker.lock.assert_called_once_with(command.url)
+    store.save.assert_called_once()
+    presenter.present.assert_called_once()
 
-    assert len(store.save.mock_calls) == 1
-    bucket, download = store.save.mock_calls[0].args[0]
-
-    assert bucket.get_id() == id_
-    assert url in bucket.urls
-    assert download.url == url
+    [download] = store.save.call_args.args[0]
+    assert download.url == command.url
     assert download.status == DownloadStatus.NEW
+    assert presenter.present.call_args.args[0] == AddNewUrlResponse(
+        download_id=download.get_id()
+    )
 
-    response = presenter.present.call_args[0][0]
-    assert response.download_id == download.get_id()
-    assert response.error is None
 
+def test_add_new_url_when_lock_fail():
+    error = AlreadyLockedError(URL)
+    store, presenter, locker, command = (
+        Mock(),
+        Mock(),
+        Mock(**{"lock.side_effect": error}),
+        AddNewUrlCommand(url=URL),
+    )
 
-def test_add_new_url_with_invalid_bucket_id():
-    id_ = uuid4()
-    url = "toto.com"
-    store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
-    store.load_stream.side_effect = StreamNotFoundError(id_)
+    AddNewUrl(store, locker).execute(command, presenter)
 
-    AddNewUrl(store).execute(command, presenter)
-
+    locker.lock.assert_called_once_with(command.url)
     store.save.assert_not_called()
-    response = presenter.present.call_args[0][0]
-    assert response.download_id is None
-    assert isinstance(response.error, StreamNotFoundError)
+    presenter.present.assert_called_once()
+
+    assert presenter.present.call_args.args[0] == AddNewUrlResponse(error=error)
 
 
 def test_add_new_url_when_save_fail():
-    id_ = uuid4()
-    url = "toto.com"
-    store, presenter, command = Mock(), Mock(), Mock(bucket_id=id_, url=url)
-    store.load_stream.return_value = [BucketCreatedEvent(id_, now(), 1)]
-    store.save.side_effect = EventStoreError
+    error = EventStoreError(URL)
+    store, presenter, locker, command = (
+        Mock(**{"save.side_effect": error}),
+        Mock(),
+        Mock(),
+        AddNewUrlCommand(url=URL),
+    )
 
-    AddNewUrl(store).execute(command, presenter)
+    AddNewUrl(store, locker).execute(command, presenter)
 
-    store.load_stream.assert_called_once_with(id_, Bucket)
-    response = presenter.present.call_args[0][0]
-    assert response.download_id is None
-    assert isinstance(response.error, EventStoreError)
+    locker.lock.assert_called_once_with(command.url)
+    store.save.assert_called_once()
+    presenter.present.assert_called_once()
+
+    assert presenter.present.call_args.args[0] == AddNewUrlResponse(error=error)
