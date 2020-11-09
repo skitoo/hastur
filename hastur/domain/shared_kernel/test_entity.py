@@ -117,3 +117,6 @@ class TestAggregate(TestCase):
         MyEntity(self.id_, mock, init_payload=payload)
 
         mock.post_init.assert_called_once_with(payload)
+
+    def test_index(self):
+        self.assertEqual(self.instance.index, f"MyEntity:{self.instance.get_id()}")

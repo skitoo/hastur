@@ -72,3 +72,7 @@ class Aggregate(ABC):
     @property
     def base_version(self) -> int:
         return self.__version
+
+    @property
+    def index(self):
+        return f"{self.__class__.__name__}:{self.get_id()}"
