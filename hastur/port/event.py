@@ -1,15 +1,11 @@
 from typing import Dict, List, NoReturn
-from hastur.domain.shared_kernel.error import HasturError
 from hastur.domain.shared_kernel.event import (
     EventBus,
+    EventBusError,
     EventHandler,
     EventType,
     EventStream,
 )
-
-
-class EventBusError(HasturError):
-    pass
 
 
 class LocalEventBus(EventBus):
@@ -27,9 +23,8 @@ class LocalEventBus(EventBus):
 
     def dispatch(self, stream: EventStream) -> NoReturn:
         for event in stream:
-            print(type(event))
-            print(self.handlers)
-            handlers = self.handlers.get(type(event), [])
-            print(handlers)
-            for handler in handlers:
-                handler(event)
+            types = type(event).__bases__ + (type(event),)
+            for type_ in types:
+                handlers = self.handlers.get(type_, [])
+                for handler in handlers:
+                    handler(event)
