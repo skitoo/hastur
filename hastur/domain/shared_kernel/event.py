@@ -52,6 +52,10 @@ EventType = Type[DomainEvent]
 EventHandler = Callable[[DomainEvent], NoReturn]
 
 
+class EventBusError(HasturError):
+    pass
+
+
 class EventBus(ABC):
     @abstractmethod
     def add_handler(self, event_type: EventType, handler: EventHandler) -> NoReturn:

@@ -1,15 +1,11 @@
 from typing import Dict, List, NoReturn
-from hastur.domain.shared_kernel.error import HasturError
 from hastur.domain.shared_kernel.event import (
     EventBus,
+    EventBusError,
     EventHandler,
     EventType,
     EventStream,
 )
-
-
-class EventBusError(HasturError):
-    pass
 
 
 class LocalEventBus(EventBus):
