@@ -1,7 +1,13 @@
 from uuid import uuid4
 from datetime import datetime
 import pytest
-from .download import Download, DownloadStatus, DownloadError, DownloadCreatedEvent
+from .download import (
+    Download,
+    DownloadStatus,
+    DownloadError,
+    DownloadCreatedEvent,
+    DownloadFileInfosSettedEvent,
+)
 
 
 now = datetime.now
@@ -51,3 +57,19 @@ def test_download_post_init_with_payload_and_with_stream():
             ],
             DownloadCreatedEvent.Payload(url=URL, status=status),
         )
+
+
+def test_download_set_infos():
+    id_ = uuid4()
+    download = Download(
+        id_,
+        [
+            DownloadCreatedEvent(
+                id_, now(), 1, DownloadCreatedEvent.Payload(url=URL, status=status)
+            )
+        ],
+    )
+    download.set_infos(1000, "foo.avi")
+    assert download.size == 1000
+    assert download.filename == "foo.avi"
+    assert isinstance(download.new_events[0], DownloadFileInfosSettedEvent)

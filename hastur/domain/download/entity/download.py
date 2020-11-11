@@ -22,9 +22,17 @@ class DownloadCreatedEvent(DomainEvent):
         status: DownloadStatus
 
 
+class DownloadFileInfosSettedEvent(DomainEvent):
+    class Payload(BaseModel):
+        size: int
+        filename: str
+
+
 class Download(Aggregate):
     __url: str
     __status: DownloadStatus
+    __size: int
+    __filename: str
 
     def post_init(self, payload: DownloadCreatedEvent.Payload):
         if not self.stream:
@@ -39,9 +47,23 @@ class Download(Aggregate):
         elif payload:
             raise DownloadError("Payload is not required when Download already exists")
 
+    def set_infos(self, size: int, filename: str):
+        self.apply_new_event(
+            DownloadFileInfosSettedEvent(
+                self.get_id(),
+                now(),
+                self.next_version,
+                DownloadFileInfosSettedEvent.Payload(size=size, filename=filename),
+            )
+        )
+
     def on_download_created(self, event: DownloadCreatedEvent):
         self.__url = event.payload.url
         self.__status = DownloadStatus.NEW
+
+    def on_download_file_infos_setted(self, event: DownloadFileInfosSettedEvent):
+        self.__size = event.payload.size
+        self.__filename = event.payload.filename
 
     @property
     def url(self) -> str:
@@ -50,3 +72,11 @@ class Download(Aggregate):
     @property
     def status(self) -> DownloadStatus:
         return self.__status
+
+    @property
+    def size(self) -> int:
+        return self.__size
+
+    @property
+    def filename(self) -> str:
+        return self.__filename
