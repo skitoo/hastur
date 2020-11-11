@@ -39,6 +39,14 @@ class DownloadProjection(ABC):
     def list(self) -> List[Download]:
         pass
 
+    @abstractmethod
+    def get(self, id_: UUID) -> Download:
+        pass
+
+    @abstractmethod
+    def update(self, download: Download):
+        pass
+
 
 class ProjectionFactory(ABC):
     @abstractmethod

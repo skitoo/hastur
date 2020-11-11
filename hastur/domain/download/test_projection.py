@@ -1,4 +1,4 @@
-from uuid import uuid4
+from uuid import uuid4, UUID
 from datetime import datetime
 from hastur.port.event import LocalEventBus
 from .entity.download import DownloadCreatedEvent, DownloadStatus
@@ -13,6 +13,12 @@ class LocalProjection(DownloadProjection):
 
     def list(self):
         return
+
+    def get(self, id_: UUID) -> Download:
+        return
+
+    def update(self, download: Download):
+        pass
 
 
 def test_download_projection_on_created_event():
