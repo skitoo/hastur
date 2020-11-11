@@ -1,5 +1,6 @@
 # pylint: disable=no-name-in-module
 from abc import ABC, abstractmethod
+from logging import Logger, getLogger
 from typing import Dict, Optional
 from pydantic import BaseModel
 from .error import HasturError, HasturErrorMessage
@@ -41,6 +42,9 @@ class Presenter(ABC):
 
 
 class MessageHandler(ABC):
+    def __init__(self):
+        self.logger: Logger = getLogger(str(type(self)))
+
     @abstractmethod
     def execute(self, message: Message, presenter: Presenter):
         pass

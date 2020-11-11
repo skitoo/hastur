@@ -16,6 +16,7 @@ class DownloadListBodyResponse(BaseModel):
 
 class DownloadList(QueryHandler):
     def __init__(self, projection: DownloadProjection):
+        super().__init__()
         self.projection: DownloadProjection = projection
 
     def message_type(self) -> type:
@@ -25,6 +26,7 @@ class DownloadList(QueryHandler):
         response = Response()
         try:
             response.body = DownloadListBodyResponse(downloads=self.projection.list())
-        except HasturError:
+        except HasturError as error:
+            self.logger.exception(error)
             response.error = UnknownErrorMessage()
         presenter.present(response)

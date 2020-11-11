@@ -25,6 +25,7 @@ class FetchUrlQuery(Query):
 
 class AddUrl(CommandHandler):
     def __init__(self, mock: Mock = None):
+        super().__init__()
         self.mock = mock
 
     def execute(self, message: Command, presenter: Presenter):
@@ -36,6 +37,7 @@ class AddUrl(CommandHandler):
 
 class FetchUrl(QueryHandler):
     def __init__(self, mock: Mock = None):
+        super().__init__()
         self.mock = mock
 
     def execute(self, message: Query, presenter: Presenter):

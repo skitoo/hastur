@@ -29,6 +29,7 @@ class AddNewUrlBodyResponse(BaseModel):
 
 class AddNewUrl(CommandHandler):
     def __init__(self, manager: AggregateManager, locker: Locker):
+        super().__init__()
         self.manager: AggregateManager = manager
         self.locker: Locker = locker
 
@@ -48,7 +49,8 @@ class AddNewUrl(CommandHandler):
             self.manager.save_and_dispatch([download])
         except AlreadyLockedError:
             response.error = UrlAlreadyRegistered()
-        except HasturError:
+        except HasturError as error:
+            self.logger.exception(error)
             response.error = UnknownErrorMessage()
         else:
             response.body = AddNewUrlBodyResponse(download_id=download.get_id())
