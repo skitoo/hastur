@@ -1,6 +1,8 @@
-from typing import Optional, List
+# pylint: disable=no-name-in-module
+from typing import List
+from pydantic import BaseModel
 from hastur.domain.shared_kernel.message import Query, QueryHandler, Response, Presenter
-from hastur.domain.shared_kernel.error import HasturError
+from hastur.domain.shared_kernel.error import HasturError, UnknownErrorMessage
 from hastur.domain.download.projection import Download, DownloadProjection
 
 
@@ -8,8 +10,8 @@ class DownloadListQuery(Query):
     pass
 
 
-class DownloadListResponse(Response):
-    downloads: Optional[List[Download]] = None
+class DownloadListBodyResponse(BaseModel):
+    downloads: List[Download]
 
 
 class DownloadList(QueryHandler):
@@ -20,9 +22,9 @@ class DownloadList(QueryHandler):
         return DownloadListQuery
 
     def execute(self, _: DownloadListQuery, presenter: Presenter):
-        response = DownloadListResponse()
+        response = Response()
         try:
-            response.downloads = self.projection.list()
-        except HasturError as error:
-            response.error = error
+            response.body = DownloadListBodyResponse(downloads=self.projection.list())
+        except HasturError:
+            response.error = UnknownErrorMessage()
         presenter.present(response)

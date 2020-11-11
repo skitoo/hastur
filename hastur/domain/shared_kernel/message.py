@@ -1,8 +1,8 @@
 # pylint: disable=no-name-in-module
 from abc import ABC, abstractmethod
-from typing import Dict, Optional, Any
+from typing import Dict, Optional
 from pydantic import BaseModel
-from .error import HasturError
+from .error import HasturError, HasturErrorMessage
 
 
 class MessageBusError(HasturError):
@@ -29,8 +29,9 @@ class Query(Message, ABC):
     pass
 
 
-class Response(BaseModel, ABC):
-    error: Optional[Any] = None
+class Response(BaseModel):
+    error: Optional[HasturErrorMessage] = None
+    body: Optional[BaseModel] = None
 
 
 class Presenter(ABC):
