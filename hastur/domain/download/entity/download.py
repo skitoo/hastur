@@ -14,6 +14,7 @@ class DownloadError(AggregateError):
 
 class DownloadStatus(Enum):
     NEW = "new"
+    OFFLINE = "offline"
     ONLINE = "online"
 
 
@@ -24,6 +25,11 @@ class DownloadCreatedEvent(DomainEvent):
 
 
 class DownloadFileSettedOnlineEvent(DomainEvent):
+    class Payload(BaseModel):
+        status: DownloadStatus
+
+
+class DownloadFileSettedOfflineEvent(DomainEvent):
     class Payload(BaseModel):
         status: DownloadStatus
 
@@ -73,6 +79,16 @@ class Download(Aggregate):
             )
         )
 
+    def set_offline(self):
+        self.apply_new_event(
+            DownloadFileSettedOfflineEvent(
+                self.get_id(),
+                now(),
+                self.next_version,
+                DownloadFileSettedOfflineEvent.Payload(status=DownloadStatus.OFFLINE),
+            )
+        )
+
     def on_download_created(self, event: DownloadCreatedEvent):
         self.__url = event.payload.url
         self.__status = DownloadStatus.NEW
@@ -83,6 +99,9 @@ class Download(Aggregate):
 
     def on_download_file_setted_online(self, _: DownloadFileSettedOnlineEvent):
         self.__status = DownloadStatus.ONLINE
+
+    def on_download_file_setted_offline(self, _: DownloadFileSettedOfflineEvent):
+        self.__status = DownloadStatus.OFFLINE
 
     @property
     def url(self) -> str:
