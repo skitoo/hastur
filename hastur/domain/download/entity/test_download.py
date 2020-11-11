@@ -7,6 +7,7 @@ from .download import (
     DownloadError,
     DownloadCreatedEvent,
     DownloadFileInfosSettedEvent,
+    DownloadFileSettedOnlineEvent,
 )
 
 
@@ -73,3 +74,18 @@ def test_download_set_infos():
     assert download.size == 1000
     assert download.filename == "foo.avi"
     assert isinstance(download.new_events[0], DownloadFileInfosSettedEvent)
+
+
+def test_download_set_online():
+    id_ = uuid4()
+    download = Download(
+        id_,
+        [
+            DownloadCreatedEvent(
+                id_, now(), 1, DownloadCreatedEvent.Payload(url=URL, status=status)
+            )
+        ],
+    )
+    download.set_online()
+    assert download.status == DownloadStatus.ONLINE
+    assert isinstance(download.new_events[0], DownloadFileSettedOnlineEvent)
