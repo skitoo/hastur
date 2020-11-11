@@ -2,8 +2,11 @@ from unittest.mock import Mock
 from datetime import datetime
 from hastur.domain.shared_kernel.locker import AlreadyLockedError
 from hastur.domain.shared_kernel.store import EventStoreError
+from hastur.domain.shared_kernel.message import Response
+from hastur.domain.shared_kernel.error import UnknownErrorMessage
 from hastur.domain.download.entity.download import DownloadStatus
-from .add_new_url import AddNewUrl, AddNewUrlCommand, AddNewUrlResponse
+from ..error import UrlAlreadyRegistered
+from .add_new_url import AddNewUrl, AddNewUrlCommand, AddNewUrlBodyResponse
 
 now = datetime.now
 URL = "http://foo.com"
@@ -30,8 +33,8 @@ def test_add_new_url_success():
     [download] = manager.save_and_dispatch.call_args.args[0]
     assert download.url == command.url
     assert download.status == DownloadStatus.NEW
-    assert presenter.present.call_args.args[0] == AddNewUrlResponse(
-        download_id=download.get_id()
+    assert presenter.present.call_args.args[0] == Response(
+        body=AddNewUrlBodyResponse(download_id=download.get_id())
     )
 
 
@@ -50,7 +53,7 @@ def test_add_new_url_when_lock_fail():
     manager.save_and_dispatch.assert_not_called()
     presenter.present.assert_called_once()
 
-    assert presenter.present.call_args.args[0] == AddNewUrlResponse(error=error)
+    assert presenter.present.call_args.args[0] == Response(error=UrlAlreadyRegistered())
 
 
 def test_add_new_url_when_save_fail():
@@ -68,4 +71,4 @@ def test_add_new_url_when_save_fail():
     manager.save_and_dispatch.assert_called_once()
     presenter.present.assert_called_once()
 
-    assert presenter.present.call_args.args[0] == AddNewUrlResponse(error=error)
+    assert presenter.present.call_args.args[0] == Response(error=UnknownErrorMessage())

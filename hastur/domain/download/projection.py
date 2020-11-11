@@ -38,3 +38,9 @@ class DownloadProjection(ABC):
     @abstractmethod
     def list(self) -> List[Download]:
         pass
+
+
+class ProjectionFactory(ABC):
+    @abstractmethod
+    def create_download_projection(self) -> DownloadProjection:
+        pass

@@ -8,6 +8,8 @@ license = "GPL3"
 [tool.poetry.dependencies]
 python = "^3.8"
 pydantic = "^1.7.2"
+fastapi = "^0.61.2"
+uvicorn = "^0.12.2"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.19.0"
