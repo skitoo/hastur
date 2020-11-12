@@ -2,8 +2,8 @@
 from datetime import datetime
 from enum import Enum
 from pydantic import BaseModel, HttpUrl
-from hastur.domain.shared_kernel.entity import Aggregate, AggregateError
-from hastur.domain.shared_kernel.event import DomainEvent
+from hastur.core.entity import Aggregate, AggregateError
+from hastur.core.event import DomainEvent
 
 now = datetime.now
 

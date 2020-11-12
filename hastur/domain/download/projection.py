@@ -4,7 +4,7 @@ from datetime import datetime
 from uuid import UUID
 from typing import List, Optional
 from pydantic import BaseModel, HttpUrl
-from hastur.domain.shared_kernel.event import EventBus, DomainEvent
+from hastur.core.event import EventBus, DomainEvent
 from hastur.domain.download.entity.download import (
     DownloadCreatedEvent,
     DownloadFileInfosSettedEvent,

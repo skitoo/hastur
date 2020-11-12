@@ -1,6 +1,6 @@
 from fastapi import HTTPException, status
-from hastur.domain.shared_kernel.message import Presenter, Response
-from hastur.domain.shared_kernel.error import UnknownErrorMessage
+from hastur.core.message import Presenter, Response
+from hastur.core.error import UnknownErrorMessage
 from hastur.domain.download.error import UrlAlreadyRegistered
 
 

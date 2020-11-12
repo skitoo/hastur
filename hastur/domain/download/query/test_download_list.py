@@ -1,6 +1,6 @@
 from unittest.mock import Mock
-from hastur.domain.shared_kernel.error import HasturError, UnknownErrorMessage
-from hastur.domain.shared_kernel.message import Response
+from hastur.core.error import HasturError, UnknownErrorMessage
+from hastur.core.message import Response
 from .download_list import DownloadList, DownloadListQuery, DownloadListBodyResponse
 
 

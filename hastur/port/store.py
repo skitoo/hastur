@@ -1,12 +1,12 @@
 from uuid import UUID
 from typing import Dict, Type, NoReturn
-from hastur.domain.shared_kernel.store import (
+from hastur.core.store import (
     EventStore,
     StreamNotFoundError,
     BaseVersionNotMatchError,
 )
-from hastur.domain.shared_kernel.entity import Aggregate, AggregateCollection
-from hastur.domain.shared_kernel.event import EventStream
+from hastur.core.entity import Aggregate, AggregateCollection
+from hastur.core.event import EventStream
 
 
 class InMemoryEventStore(EventStore):

@@ -1,4 +1,4 @@
-from hastur.domain.shared_kernel.error import HasturErrorMessage
+from hastur.core.error import HasturErrorMessage
 
 
 class UrlAlreadyRegistered(HasturErrorMessage):

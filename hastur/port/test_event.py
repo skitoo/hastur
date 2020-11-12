@@ -1,9 +1,8 @@
-#  from hastur.domain.shared_kernel.event import Domain
 from unittest.mock import Mock
 from uuid import uuid4
 from datetime import datetime
 import pytest
-from hastur.domain.shared_kernel.event import DomainEvent
+from hastur.core.event import DomainEvent
 from .event import LocalEventBus, EventBusError
 
 

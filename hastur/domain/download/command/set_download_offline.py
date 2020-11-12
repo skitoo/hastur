@@ -1,13 +1,13 @@
 from uuid import UUID
-from hastur.domain.shared_kernel.error import HasturError, UnknownErrorMessage
-from hastur.domain.shared_kernel.store import StreamNotFoundError
-from hastur.domain.shared_kernel.message import (
+from hastur.core.error import HasturError, UnknownErrorMessage
+from hastur.core.store import StreamNotFoundError
+from hastur.core.message import (
     Command,
     CommandHandler,
     Response,
     Presenter,
 )
-from hastur.domain.shared_kernel.manager import AggregateManager
+from hastur.core.manager import AggregateManager
 from hastur.domain.download.entity.download import Download
 from hastur.domain.download.error import UnknownDownload
 

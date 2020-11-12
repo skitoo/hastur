@@ -3,7 +3,7 @@ from uuid import UUID
 import asyncio
 from pydantic import HttpUrl
 import requests
-from hastur.domain.shared_kernel.message import NullPresenter
+from hastur.core.message import NullPresenter
 from hastur.domain.download.task import Downloader
 from hastur.domain.download.entity.download import DownloadCreatedEvent
 from hastur.domain.download.command.update_file_infos import UpdateFileInfosCommand

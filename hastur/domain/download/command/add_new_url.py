@@ -1,11 +1,11 @@
 # pylint: disable=no-name-in-module
 from uuid import UUID, uuid4
 from pydantic import BaseModel, HttpUrl
-from hastur.domain.shared_kernel.manager import AggregateManager
-from hastur.domain.shared_kernel.error import UnknownErrorMessage
-from hastur.domain.shared_kernel.locker import Locker, AlreadyLockedError
-from hastur.domain.shared_kernel.error import HasturError
-from hastur.domain.shared_kernel.message import (
+from hastur.core.manager import AggregateManager
+from hastur.core.error import UnknownErrorMessage
+from hastur.core.locker import Locker, AlreadyLockedError
+from hastur.core.error import HasturError
+from hastur.core.message import (
     Command,
     CommandHandler,
     Response,

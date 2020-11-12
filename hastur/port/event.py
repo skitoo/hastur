@@ -1,5 +1,5 @@
 from typing import Dict, List, NoReturn
-from hastur.domain.shared_kernel.event import (
+from hastur.core.event import (
     EventBus,
     EventBusError,
     EventHandler,
