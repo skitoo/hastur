@@ -4,6 +4,8 @@ from hastur.domain.shared_kernel.manager import AggregateManager
 from hastur.domain.shared_kernel.event import EventBus
 from hastur.domain.shared_kernel.store import EventStore
 from hastur.domain.download.command.add_new_url import AddNewUrl
+from hastur.domain.download.command.update_file_infos import UpdateFileInfos
+from hastur.domain.download.command.set_download_offline import SetDownloadOffline
 from hastur.domain.download.query.download_list import DownloadList
 from hastur.domain.download.projection import ProjectionFactory
 
@@ -26,6 +28,8 @@ class Application:
     def __init_command_bus(self):
         self.command_bus: CommandBus = CommandBus()
         self.command_bus.register_handler(AddNewUrl(self.__manager, self.__locker))
+        self.command_bus.register_handler(UpdateFileInfos(self.__manager))
+        self.command_bus.register_handler(SetDownloadOffline(self.__manager))
 
     def __init_query_bus(self):
         self.query_bus: QueryBus = QueryBus()

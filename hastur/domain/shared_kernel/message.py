@@ -41,6 +41,11 @@ class Presenter(ABC):
         pass
 
 
+class NullPresenter(Presenter):
+    def present(self, _: Response):
+        pass
+
+
 class MessageHandler(ABC):
     def __init__(self):
         self.logger: Logger = getLogger(str(type(self)))

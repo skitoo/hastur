@@ -22,6 +22,9 @@ class InMemoryDownloadProjection(DownloadProjection):
     def get(self, id_: UUID) -> Download:
         return self.downloads[id_]
 
+    def update(self, download: Download):
+        self.downloads[download.id_] = download
+
 
 class InMemoryProjectionFactory(ProjectionFactory):
     def __init__(self, event_bus: EventBus):
