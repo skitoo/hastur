@@ -8,7 +8,7 @@ from hastur.core.message import (
     Presenter,
 )
 from hastur.core.manager import AggregateManager
-from hastur.domain.download.entity.download import Download
+from hastur.domain.download.entity import Download
 from hastur.domain.download.error import UnknownDownload
 
 

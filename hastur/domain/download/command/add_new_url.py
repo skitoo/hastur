@@ -11,7 +11,7 @@ from hastur.core.message import (
     Response,
     Presenter,
 )
-from hastur.domain.download.entity.download import (
+from hastur.domain.download.entity import (
     Download,
     DownloadCreatedEvent,
     DownloadStatus,

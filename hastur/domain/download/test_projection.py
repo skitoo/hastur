@@ -2,7 +2,7 @@ from unittest.mock import Mock
 from uuid import uuid4, UUID
 from datetime import datetime
 from hastur.port.event import LocalEventBus
-from .entity.download import (
+from .entity import (
     DownloadCreatedEvent,
     DownloadFileInfosSettedEvent,
     DownloadFileSettedOfflineEvent,

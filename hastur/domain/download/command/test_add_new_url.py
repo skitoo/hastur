@@ -4,7 +4,7 @@ from hastur.core.locker import AlreadyLockedError
 from hastur.core.store import EventStoreError
 from hastur.core.message import Response
 from hastur.core.error import UnknownErrorMessage
-from hastur.domain.download.entity.download import DownloadStatus
+from hastur.domain.download.entity import DownloadStatus
 from ..error import UrlAlreadyRegistered
 from .add_new_url import AddNewUrl, AddNewUrlCommand, AddNewUrlBodyResponse
 

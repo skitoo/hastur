@@ -3,7 +3,7 @@ from uuid import uuid4
 from hastur.core.message import Response
 from hastur.core.store import StreamNotFoundError
 from hastur.core.error import HasturError, UnknownErrorMessage
-from hastur.domain.download.entity.download import Download
+from hastur.domain.download.entity import Download
 from hastur.domain.download.error import UnknownDownload
 from .update_file_infos import UpdateFileInfos, UpdateFileInfosCommand
 

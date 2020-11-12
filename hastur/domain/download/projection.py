@@ -5,13 +5,13 @@ from uuid import UUID
 from typing import List, Optional
 from pydantic import BaseModel, HttpUrl
 from hastur.core.event import EventBus, DomainEvent
-from hastur.domain.download.entity.download import (
+from hastur.domain.download.entity import (
     DownloadCreatedEvent,
     DownloadFileInfosSettedEvent,
     DownloadFileSettedOnlineEvent,
     DownloadFileSettedOfflineEvent,
 )
-from .entity.download import DownloadStatus
+from .entity import DownloadStatus
 
 
 class Download(BaseModel):
