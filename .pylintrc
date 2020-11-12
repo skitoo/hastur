@@ -6,3 +6,4 @@ disable=missing-module-docstring,
 
 [SIMILARITIES]
 ignore-imports=yes
+min-similarity-lines=10
