@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from logging import getLogger, Logger
-from hastur.domain.shared_kernel.event import EventBus
-from hastur.domain.shared_kernel.message import CommandBus
-from hastur.domain.download.entity.download import DownloadCreatedEvent
+from hastur.core.event import EventBus
+from hastur.core.message import CommandBus
+from hastur.domain.download.entity import DownloadCreatedEvent
 
 
 class Downloader(ABC):

@@ -1,7 +1,7 @@
 from uuid import uuid4
 from datetime import datetime
 import pytest
-from .download import (
+from .entity import (
     Download,
     DownloadStatus,
     DownloadError,

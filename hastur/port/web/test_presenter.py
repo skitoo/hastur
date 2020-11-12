@@ -2,8 +2,8 @@
 from fastapi import HTTPException, status
 from pydantic import BaseModel
 import pytest
-from hastur.domain.shared_kernel.error import UnknownErrorMessage
-from hastur.domain.shared_kernel.message import Response
+from hastur.core.error import UnknownErrorMessage
+from hastur.core.message import Response
 from hastur.domain.download.error import UrlAlreadyRegistered
 from .presenter import HttpPresenter
 

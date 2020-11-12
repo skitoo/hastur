@@ -1,6 +1,6 @@
 from uuid import UUID
 from typing import Dict, List
-from hastur.domain.shared_kernel.event import EventBus
+from hastur.core.event import EventBus
 from hastur.domain.download.projection import (
     DownloadProjection,
     Download,

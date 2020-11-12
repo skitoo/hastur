@@ -1,8 +1,8 @@
 # pylint: disable=no-name-in-module
 from typing import List
 from pydantic import BaseModel
-from hastur.domain.shared_kernel.message import Query, QueryHandler, Response, Presenter
-from hastur.domain.shared_kernel.error import HasturError, UnknownErrorMessage
+from hastur.core.message import Query, QueryHandler, Response, Presenter
+from hastur.core.error import HasturError, UnknownErrorMessage
 from hastur.domain.download.projection import Download, DownloadProjection
 
 

@@ -1,5 +1,5 @@
 import pytest
-from hastur.domain.shared_kernel.locker import AlreadyLockedError, LockNotExistsError
+from hastur.core.locker import AlreadyLockedError, LockNotExistsError
 from .locker import InMemoryLocker
 
 

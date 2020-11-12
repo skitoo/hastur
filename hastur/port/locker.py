@@ -1,5 +1,5 @@
 from typing import List, Any, NoReturn
-from hastur.domain.shared_kernel.locker import (
+from hastur.core.locker import (
     Locker,
     AlreadyLockedError,
     LockNotExistsError,

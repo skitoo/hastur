@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 from datetime import datetime
-from hastur.domain.shared_kernel.locker import AlreadyLockedError
-from hastur.domain.shared_kernel.store import EventStoreError
-from hastur.domain.shared_kernel.message import Response
-from hastur.domain.shared_kernel.error import UnknownErrorMessage
-from hastur.domain.download.entity.download import DownloadStatus
+from hastur.core.locker import AlreadyLockedError
+from hastur.core.store import EventStoreError
+from hastur.core.message import Response
+from hastur.core.error import UnknownErrorMessage
+from hastur.domain.download.entity import DownloadStatus
 from ..error import UrlAlreadyRegistered
 from .add_new_url import AddNewUrl, AddNewUrlCommand, AddNewUrlBodyResponse
 

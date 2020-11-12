@@ -1,8 +1,8 @@
-from hastur.domain.shared_kernel.locker import Locker
-from hastur.domain.shared_kernel.message import CommandBus, QueryBus
-from hastur.domain.shared_kernel.manager import AggregateManager
-from hastur.domain.shared_kernel.event import EventBus
-from hastur.domain.shared_kernel.store import EventStore
+from hastur.core.locker import Locker
+from hastur.core.message import CommandBus, QueryBus
+from hastur.core.manager import AggregateManager
+from hastur.core.event import EventBus
+from hastur.core.store import EventStore
 from hastur.domain.download.command.add_new_url import AddNewUrl
 from hastur.domain.download.command.update_file_infos import UpdateFileInfos
 from hastur.domain.download.command.set_download_offline import SetDownloadOffline
