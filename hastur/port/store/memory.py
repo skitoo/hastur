@@ -11,6 +11,7 @@ from hastur.core.event import EventStream
 
 class InMemoryEventStore(EventStore):
     def __init__(self):
+        super().__init__()
         self.events: Dict[str, EventStream] = {}
 
     def __check_version(self, aggregate: Aggregate):
