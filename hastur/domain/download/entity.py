@@ -12,7 +12,7 @@ class DownloadError(AggregateError):
     pass
 
 
-class DownloadStatus(Enum):
+class DownloadStatus(str, Enum):
     NEW = "new"
     OFFLINE = "offline"
     ONLINE = "online"
