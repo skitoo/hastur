@@ -22,7 +22,7 @@ class LocalProjection(DownloadProjection):
         return
 
     def get(self, id_: UUID) -> Download:
-        return
+        return self.download
 
     def update(self, download: Download):
         pass

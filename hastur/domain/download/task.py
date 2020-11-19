@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from logging import getLogger, Logger
-from hastur.core.event import EventBus
+from hastur.core.event import EventBus, DomainEvent
 from hastur.core.message import CommandBus
 from hastur.domain.download.entity import DownloadCreatedEvent
 
@@ -13,5 +13,5 @@ class Downloader(ABC):
         self.event_bus.add_handler(DownloadCreatedEvent, self.on_download_created)
 
     @abstractmethod
-    def on_download_created(self, event: DownloadCreatedEvent):
+    def on_download_created(self, event: DomainEvent):
         pass

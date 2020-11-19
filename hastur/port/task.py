@@ -4,8 +4,8 @@ import asyncio
 from pydantic import HttpUrl
 import requests
 from hastur.core.message import NullPresenter
+from hastur.core.event import DomainEvent
 from hastur.domain.download.task import Downloader
-from hastur.domain.download.entity import DownloadCreatedEvent
 from hastur.domain.download.command.update_file_infos import UpdateFileInfosCommand
 from hastur.domain.download.command.set_download_offline import (
     SetDownloadOfflineCommand,
@@ -13,7 +13,7 @@ from hastur.domain.download.command.set_download_offline import (
 
 
 class AsyncDownloader(Downloader):
-    def on_download_created(self, event: DownloadCreatedEvent):
+    def on_download_created(self, event: DomainEvent):
         asyncio.create_task(self.fetch_file_infos(event.id_, event.payload.url))
 
     async def fetch_file_infos(self, id_: UUID, url: HttpUrl):
