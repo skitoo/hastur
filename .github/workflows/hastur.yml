@@ -30,5 +30,8 @@ jobs:
     - name: Lint with black
       run: poetry run black --check hastur
 
+    - name: Check typing
+      run: poetry run mypy .
+
     - name: Test with pytest
       run: poetry run pytest -v .
