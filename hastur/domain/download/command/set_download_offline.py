@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import cast
 from hastur.core.error import HasturError, UnknownErrorMessage
 from hastur.core.store import StreamNotFoundError
 from hastur.core.message import (
@@ -6,6 +7,7 @@ from hastur.core.message import (
     CommandHandler,
     Response,
     Presenter,
+    Message,
 )
 from hastur.core.manager import AggregateManager
 from hastur.domain.download.entity import Download
@@ -24,10 +26,13 @@ class SetDownloadOffline(CommandHandler):
     def message_type(self) -> type:
         return SetDownloadOfflineCommand
 
-    def execute(self, message: SetDownloadOfflineCommand, presenter: Presenter):
+    def execute(self, message: Message, presenter: Presenter):
+        message = cast(SetDownloadOfflineCommand, message)
         response = Response()
         try:
-            download: Download = self.manager.load(message.id_, Download)
+            download: Download = cast(
+                Download, self.manager.load(message.id_, Download)
+            )
             download.set_offline()
             self.manager.save_and_dispatch([download])
         except StreamNotFoundError:

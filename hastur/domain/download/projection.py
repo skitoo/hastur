@@ -37,7 +37,7 @@ class DownloadProjection(ABC):
             DownloadFileSettedOfflineEvent, self.on_download_status_change
         )
 
-    def on_download_created(self, event: DownloadCreatedEvent):
+    def on_download_created(self, event: DomainEvent):
         self.add(
             Download(
                 id_=event.id_,
@@ -47,7 +47,7 @@ class DownloadProjection(ABC):
             )
         )
 
-    def on_download_file_infos_setted(self, event: DownloadFileInfosSettedEvent):
+    def on_download_file_infos_setted(self, event: DomainEvent):
         download: Download = self.get(event.id_)
         download.size = event.payload.size
         download.filename = event.payload.filename

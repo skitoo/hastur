@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Dict, Type, NoReturn
+from typing import Dict, Type
 from hastur.core.store import (
     EventStore,
     StreamNotFoundError,
@@ -28,7 +28,7 @@ class InMemoryEventStore(EventStore):
         current_stream = self.events.get(aggregate.index, [])
         self.events[aggregate.index] = current_stream + aggregate.new_events
 
-    def save(self, aggregates: AggregateCollection) -> NoReturn:
+    def save(self, aggregates: AggregateCollection):
         for aggregate in aggregates:
             self.__check_version(aggregate)
         for aggregate in aggregates:

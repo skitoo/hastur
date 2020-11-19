@@ -1,4 +1,4 @@
-from typing import List, Any, NoReturn
+from typing import Set, Any
 from hastur.core.locker import (
     Locker,
     AlreadyLockedError,
@@ -8,14 +8,14 @@ from hastur.core.locker import (
 
 class InMemoryLocker(Locker):
     def __init__(self):
-        self.locks: List[Any] = set()
+        self.locks: Set[Any] = set()
 
-    def lock(self, value: Any) -> NoReturn:
+    def lock(self, value: Any):
         if value in self.locks:
             raise AlreadyLockedError(value)
         self.locks.add(value)
 
-    def unlock(self, value: Any) -> NoReturn:
+    def unlock(self, value: Any):
         if value not in self.locks:
             raise LockNotExistsError(value)
         self.locks.remove(value)

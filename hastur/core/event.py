@@ -2,7 +2,7 @@
 from uuid import UUID
 from datetime import datetime
 from abc import ABC, abstractmethod
-from typing import List, NoReturn, Callable, Type
+from typing import List, NoReturn, Callable, Type, Any
 import re
 from pydantic import BaseModel
 from .error import HasturError
@@ -49,7 +49,7 @@ class DomainEvent:
 
 EventStream = List[DomainEvent]
 EventType = Type[DomainEvent]
-EventHandler = Callable[[DomainEvent], NoReturn]
+EventHandler = Callable[[DomainEvent], Any]
 
 
 class EventBusError(HasturError):

@@ -1,5 +1,5 @@
 from uuid import UUID
-from typing import Optional
+from typing import cast
 from hastur.core.error import HasturError, UnknownErrorMessage
 from hastur.core.store import StreamNotFoundError
 from hastur.core.message import (
@@ -7,6 +7,7 @@ from hastur.core.message import (
     CommandHandler,
     Response,
     Presenter,
+    Message,
 )
 from hastur.core.manager import AggregateManager
 from hastur.domain.download.entity import Download
@@ -15,8 +16,8 @@ from hastur.domain.download.error import UnknownDownload
 
 class UpdateFileInfosCommand(Command):
     id_: UUID
-    size: Optional[int] = None
-    filename: Optional[str] = None
+    size: int
+    filename: str
 
 
 class UpdateFileInfos(CommandHandler):
@@ -27,10 +28,13 @@ class UpdateFileInfos(CommandHandler):
     def message_type(self) -> type:
         return UpdateFileInfosCommand
 
-    def execute(self, message: UpdateFileInfosCommand, presenter: Presenter):
+    def execute(self, message: Message, presenter: Presenter):
+        message = cast(UpdateFileInfosCommand, message)
         response = Response()
         try:
-            download: Download = self.manager.load(message.id_, Download)
+            download: Download = cast(
+                Download, self.manager.load(message.id_, Download)
+            )
             download.set_online()
             download.set_infos(message.size, message.filename)
             self.manager.save_and_dispatch([download])

@@ -11,7 +11,7 @@ from hastur.domain.download.projection import (
 class InMemoryDownloadProjection(DownloadProjection):
     def __init__(self, event_bus: EventBus):
         super().__init__(event_bus)
-        self.downloads: Dict[UUID, List[Download]] = {}
+        self.downloads: Dict[UUID, Download] = {}
 
     def add(self, download: Download):
         self.downloads[download.id_] = download

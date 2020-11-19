@@ -6,6 +6,7 @@ from .message import (
     QueryBus,
     Command,
     Query,
+    Message,
     CommandHandler,
     QueryHandler,
     Presenter,
@@ -24,11 +25,11 @@ class FetchUrlQuery(Query):
 
 
 class AddUrl(CommandHandler):
-    def __init__(self, mock: Mock = None):
+    def __init__(self, mock: Mock):
         super().__init__()
         self.mock = mock
 
-    def execute(self, message: Command, presenter: Presenter):
+    def execute(self, message: Message, presenter: Presenter):
         self.mock.execute(message, presenter)
 
     def message_type(self) -> type:
@@ -36,11 +37,11 @@ class AddUrl(CommandHandler):
 
 
 class FetchUrl(QueryHandler):
-    def __init__(self, mock: Mock = None):
+    def __init__(self, mock: Mock):
         super().__init__()
         self.mock = mock
 
-    def execute(self, message: Query, presenter: Presenter):
+    def execute(self, message: Message, presenter: Presenter):
         self.mock.execute(message, presenter)
 
     def message_type(self) -> type:
@@ -53,17 +54,17 @@ class TestCommandBus(TestCase):
         self.mock = Mock()
 
     def test_register_handler_with_sucess(self):
-        handler = AddUrl()
+        handler = AddUrl(self.mock)
         self.instance.register_handler(handler)
 
     def test_register_handler_with_handler_already_registered(self):
-        handler = AddUrl()
+        handler = AddUrl(self.mock)
         self.instance.register_handler(handler)
         with pytest.raises(MessageBusError):
             self.instance.register_handler(handler)
 
     def test_register_handler_with_bad_handler_type(self):
-        handler = FetchUrl()
+        handler = FetchUrl(self.mock)
         with pytest.raises(CommandBusError):
             self.instance.register_handler(handler)
 
@@ -104,17 +105,17 @@ class TestQueryBus(TestCase):
         self.mock = Mock()
 
     def test_register_handler_with_sucess(self):
-        handler = FetchUrl()
+        handler = FetchUrl(self.mock)
         self.instance.register_handler(handler)
 
     def test_register_handler_with_handler_already_registered(self):
-        handler = FetchUrl()
+        handler = FetchUrl(self.mock)
         self.instance.register_handler(handler)
         with pytest.raises(MessageBusError):
             self.instance.register_handler(handler)
 
     def test_register_handler_with_bad_handler_type(self):
-        handler = AddUrl()
+        handler = AddUrl(self.mock)
         with pytest.raises(QueryBusError):
             self.instance.register_handler(handler)
 

@@ -1,11 +1,14 @@
+# pylint: disable=no-name-in-module
+from typing import Optional
 from fastapi import HTTPException, status
+from pydantic import BaseModel
 from hastur.core.message import Presenter, Response
 from hastur.core.error import UnknownErrorMessage
 from hastur.domain.download.error import UrlAlreadyRegistered
 
 
 class HttpPresenter(Presenter):
-    result: Response = None
+    result: Optional[BaseModel] = None
 
     def __init__(self):
         self.__map_error_with_http_code()

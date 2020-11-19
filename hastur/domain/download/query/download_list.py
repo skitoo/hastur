@@ -1,7 +1,7 @@
 # pylint: disable=no-name-in-module
 from typing import List
 from pydantic import BaseModel
-from hastur.core.message import Query, QueryHandler, Response, Presenter
+from hastur.core.message import Query, QueryHandler, Response, Presenter, Message
 from hastur.core.error import HasturError, UnknownErrorMessage
 from hastur.domain.download.projection import Download, DownloadProjection
 
@@ -22,7 +22,7 @@ class DownloadList(QueryHandler):
     def message_type(self) -> type:
         return DownloadListQuery
 
-    def execute(self, _: DownloadListQuery, presenter: Presenter):
+    def execute(self, _: Message, presenter: Presenter):
         response = Response()
         try:
             response.body = DownloadListBodyResponse(downloads=self.projection.list())

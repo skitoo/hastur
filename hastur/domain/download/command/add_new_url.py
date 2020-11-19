@@ -1,5 +1,6 @@
 # pylint: disable=no-name-in-module
 from uuid import UUID, uuid4
+from typing import cast
 from pydantic import BaseModel, HttpUrl
 from hastur.core.manager import AggregateManager
 from hastur.core.error import UnknownErrorMessage
@@ -10,6 +11,7 @@ from hastur.core.message import (
     CommandHandler,
     Response,
     Presenter,
+    Message,
 )
 from hastur.domain.download.entity import (
     Download,
@@ -36,7 +38,8 @@ class AddNewUrl(CommandHandler):
     def message_type(self) -> type:
         return AddNewUrlCommand
 
-    def execute(self, message: AddNewUrlCommand, presenter: Presenter):
+    def execute(self, message: Message, presenter: Presenter):
+        message = cast(AddNewUrlCommand, message)
         response = Response()
         try:
             self.locker.lock(message.url)
