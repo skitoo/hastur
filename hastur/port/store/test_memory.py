@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 from uuid import uuid4
 import pytest
-from .store import InMemoryEventStore, BaseVersionNotMatchError, StreamNotFoundError
+from .memory import InMemoryEventStore, BaseVersionNotMatchError, StreamNotFoundError
 
 
 class TestInMemoryEventStore(TestCase):
